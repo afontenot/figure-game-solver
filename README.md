@@ -47,3 +47,5 @@ This solver is pretty fast!
     Solution: 1 2 4 4 1 3 2 3 5
     python3 solve.py game43.fg  0.09s user 0.01s system 98% cpu 0.107 total
 
+So this board takes about a tenth of a second to solve. More than a third of
+that time is the Python VM starting up, which takes around 40 ms on my system.
