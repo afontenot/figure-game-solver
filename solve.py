@@ -41,9 +41,9 @@ def solve(game, limit, depth=1):
     Input format is a list of lists in [column][row] order,
     with rows sorted bottom to top.
 
-    Returns a tuple with a list of steps needed to optimally
-    solve the game, and a number representing the depth at
-    which the game was solved.
+    Returns a list of steps that optimally solves the game,
+    or None if the game cannot be solved in the allowed
+    number of moves.
     """
 
     best_path = None
@@ -74,19 +74,19 @@ def solve(game, limit, depth=1):
         # process new game
         if len(unique_tiles) == 0:
             # if game is solved in one move, this is best case scenario
-            return ([choice], depth)
+            return [choice]
 
         # if we've reached the depth limit, no more recursion
         # significant optimization: if there are more colors remaining
         # than there are moves, we've reached a dead end. Approx 10x speedup.
         if depth < limit and len(unique_tiles) <= limit - depth:
-            solution, sol_depth = solve(new_game, limit, depth + 1)
-            if solution and sol_depth <= limit:
+            solution = solve(new_game, limit, depth + 1)
+            if solution:
                 # dynamically reduce the limit using best known solution
-                limit = sol_depth
+                limit = depth + len(solution)
                 best_path = [choice] + solution
 
-    return (best_path, limit)
+    return best_path
 
 
 if __name__ == "__main__":
@@ -109,10 +109,10 @@ if __name__ == "__main__":
 
     print(title)
 
-    s_path, s_limit = solve(game, limit)
+    solution = solve(game, limit)
 
-    if not s_path:
+    if not solution:
         print("Game has no solution!")
     else:
-        print(f"Game solved in {s_limit} moves.")
-        print("Solution:", " ".join([str(x + 1) for x in s_path]))
+        print(f"Game solved in {len(solution)} moves.")
+        print("Solution:", " ".join([str(x + 1) for x in solution]))
