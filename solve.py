@@ -4,7 +4,7 @@ import sys
 def find_remove_tiles(game, start_pos):
     color = game[start_pos[0]][start_pos[1]]
     queue = [start_pos]
-    to_remove = [start_pos]
+    to_remove = {start_pos}
     while queue:
         col, row = queue.pop()
         to_search = [(col + 1, row), (col - 1, row), (col, row + 1), (col, row - 1)]
@@ -16,8 +16,8 @@ def find_remove_tiles(game, start_pos):
                 if new_tile == color:
                     location = (t_col, t_row)
                     if not location in to_remove:
-                        queue.append((t_col, t_row))
-                        to_remove.append((t_col, t_row))
+                        queue.append(location)
+                        to_remove.add(location)
             except IndexError:
                 continue
     return to_remove
