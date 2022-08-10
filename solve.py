@@ -26,10 +26,15 @@ def find_remove_tiles(game, start_pos):
 def solve(game, limit, depth=1):
     best_path = None
 
+    prev_color = None
     for choice in range(5):
         if not game[choice]:
             continue
         chosen_color = game[choice][0]
+
+        if chosen_color == prev_color:
+            continue
+        prev_color = chosen_color
 
         # remove tiles
         new_game = [[] for _ in range(5)]
