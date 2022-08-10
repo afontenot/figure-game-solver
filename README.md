@@ -18,11 +18,11 @@ because I don't know of any official one.
 
     Title: Figure #43
     Limit: 9
-    YBBBB
-    PWBYW
-    YBYWY
-    BPWBY
-    YYWYY
+    BWYYY
+    BYWBY
+    BBYWW
+    BWBPY
+    YPYBY
 
 The title can be anything, and the limit is self-explanatory.
 
