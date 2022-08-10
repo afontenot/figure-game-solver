@@ -2,18 +2,6 @@ import sys
 from collections import deque
 
 
-shorthand = {
-    "B": 0,  # blue
-    "D": 0,  # diamond
-    "P": 1,  # pink
-    "T": 1,  # triangle
-    "W": 2,  # white
-    "S": 2,  # square
-    "Y": 3,  # yellow
-    "C": 3,  # circle
-}
-
-
 def find_remove_tiles(game, start_pos):
     color = game[start_pos[0]][start_pos[1]]
     queue = deque([start_pos])
@@ -70,6 +58,7 @@ def solve(game, limit, depth=1):
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print(f"Usage: {sys.argv[0]} game.fg")
+        sys.exit(1)
     with open(sys.argv[1]) as f:
         _, title = f.readline().strip().split(maxsplit=1)
         _, limit = f.readline().strip().split()
@@ -78,7 +67,7 @@ if __name__ == "__main__":
         game = [[] for _ in range(5)]
         for col_i in range(5):
             for row_i in range(5):
-                game[col_i].append(shorthand[data[4 - row_i][col_i]])
+                game[col_i].append(data[4 - row_i][col_i])
 
     print(title)
 
