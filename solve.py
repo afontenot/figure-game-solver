@@ -35,7 +35,7 @@ def find_remove_tiles(game, start_pos):
     return to_remove
 
 
-def solve(game, limit, depth=1):
+def solve(game, limit):
     """Solves figure.game boards recursively.
 
     Input format is a list of lists in [column][row] order,
@@ -48,6 +48,7 @@ def solve(game, limit, depth=1):
 
     best_path = None
     prev_color = None
+    limit -= 1
 
     # consider each of the five columns as possible choices
     for choice in range(5):
@@ -79,11 +80,11 @@ def solve(game, limit, depth=1):
         # if we've reached the depth limit, no more recursion
         # significant optimization: if there are more colors remaining
         # than there are moves, we've reached a dead end. Approx 10x speedup.
-        if depth < limit and len(unique_tiles) <= limit - depth:
-            solution = solve(new_game, limit, depth + 1)
+        if len(unique_tiles) <= limit:
+            solution = solve(new_game, limit)
             if solution:
                 # dynamically reduce the limit using best known solution
-                limit = depth + len(solution)
+                limit = len(solution) - 1
                 best_path = [choice] + solution
 
     return best_path

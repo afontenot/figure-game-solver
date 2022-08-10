@@ -44,6 +44,6 @@ This solver is pretty fast!
     % time python solve.py game43.fg
     Figure #43
     Game solved in 9 moves.
-    Solution: 5 4 4 2 1 1 3 2 3
-    python3 solve.py game43.fg  0.30s user 0.00s system 99% cpu 0.309 total
+    Solution: 1 2 4 4 1 3 2 3 5
+    python3 solve.py game43.fg  0.09s user 0.01s system 98% cpu 0.107 total
 
