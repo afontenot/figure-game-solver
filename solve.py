@@ -29,6 +29,7 @@ def solve(game, limit, depth=1):
     prev_color = None
     for choice in range(5):
         if not game[choice]:
+            prev_color = None
             continue
         chosen_color = game[choice][0]
 
