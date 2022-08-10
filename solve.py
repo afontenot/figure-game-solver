@@ -1,13 +1,12 @@
 import sys
-from collections import deque
 
 
 def find_remove_tiles(game, start_pos):
     color = game[start_pos[0]][start_pos[1]]
-    queue = deque([start_pos])
+    queue = [start_pos]
     to_remove = [start_pos]
     while queue:
-        col, row = queue.popleft()
+        col, row = queue.pop()
         to_search = [(col + 1, row), (col - 1, row), (col, row + 1), (col, row - 1)]
         for t_col, t_row in to_search:
             if t_col < 0 or t_row < 0:
