@@ -2,11 +2,22 @@ import sys
 
 
 def find_remove_tiles(game, start_pos):
+    """Finds tiles that will be removed if given tile is removed.
+
+    Uses a simple flood filling approach to find tiles connected
+    to a given starting tile. New tiles to search are added to a
+    stack rather than using recursion.
+
+    Returns a list of positions for tiles that will be removed.
+    """
     color = game[start_pos[0]][start_pos[1]]
-    queue = [start_pos]
+    stack = [start_pos]
+
+    # we aren't flood filling, so the color of the tiles doesn't
+    # change; instead, we keep track of tiles to remove in a set.
     to_remove = {start_pos}
-    while queue:
-        col, row = queue.pop()
+    while stack:
+        col, row = stack.pop()
         to_search = [(col + 1, row), (col - 1, row), (col, row + 1), (col, row - 1)]
         for location in to_search:
             if location in to_remove:
@@ -17,7 +28,7 @@ def find_remove_tiles(game, start_pos):
             try:
                 new_tile = game[t_col][t_row]
                 if new_tile == color:
-                    queue.append(location)
+                    stack.append(location)
                     to_remove.add(location)
             except IndexError:
                 continue
@@ -25,15 +36,27 @@ def find_remove_tiles(game, start_pos):
 
 
 def solve(game, limit, depth=1):
-    best_path = None
+    """Solves figure.game boards recursively.
 
+    Input format is a list of lists in [column][row] order,
+    with rows sorted bottom to top.
+
+    Returns a tuple with a list of steps needed to optimally
+    solve the game, and a number representing the depth at
+    which the game was solved.
+    """
+
+    best_path = None
     prev_color = None
+
+    # consider each of the five columns as possible choices
     for choice in range(5):
         if not game[choice]:
             prev_color = None
             continue
         chosen_color = game[choice][0]
 
+        # track the color of the previous column, skip if identical
         if chosen_color == prev_color:
             continue
         prev_color = chosen_color
@@ -50,11 +73,16 @@ def solve(game, limit, depth=1):
 
         # process new game
         if len(unique_tiles) == 0:
+            # if game is solved in one move, this is best case scenario
             return ([choice], depth)
 
+        # if we've reached the depth limit, no more recursion
+        # significant optimization: if there are more colors remaining
+        # than there are moves, we've reached a dead end. Approx 10x speedup.
         if depth < limit and len(unique_tiles) <= limit - depth:
             solution, sol_depth = solve(new_game, limit, depth + 1)
             if solution and sol_depth <= limit:
+                # dynamically reduce the limit using best known solution
                 limit = sol_depth
                 best_path = [choice] + solution
 
@@ -65,11 +93,15 @@ if __name__ == "__main__":
     if len(sys.argv) != 2:
         print(f"Usage: {sys.argv[0]} game.fg")
         sys.exit(1)
+
+    # see sample file for format
     with open(sys.argv[1]) as f:
         _, title = f.readline().strip().split(maxsplit=1)
         _, limit = f.readline().strip().split()
         limit = int(limit)
         data = f.read().strip().split("\n")
+
+        # convert top-down row-col format to bottom-up col-row
         game = [[] for _ in range(5)]
         for col_i in range(5):
             for row_i in range(5):
